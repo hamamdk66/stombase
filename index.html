@@ -92,9 +92,11 @@ return;
 data.forEach(category => {
 
 grid.innerHTML += `
+<a href="subcategories.html?id=${category.id}" style="text-decoration:none">
 <div class="card">
 <h3>${category.name}</h3>
 </div>
+</a>
 `;
 
 });
