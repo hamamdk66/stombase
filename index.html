@@ -30,10 +30,17 @@ background:white;
 padding:20px;
 border-radius:15px;
 box-shadow:0 5px 15px rgba(0,0,0,.08);
+cursor:pointer;
+transition:.2s;
+}
+
+.card:hover{
+transform:translateY(-3px);
 }
 
 .card h3{
 color:#0066ff;
+margin:0;
 }
 </style>
 
@@ -53,36 +60,34 @@ color:#0066ff;
 <script>
 
 const supabaseUrl = "https://ldqrrahczzxbausnevtr.supabase.co";
-const supabaseKey = "ТВОЙ_PUBLISHABLE_KEY_ЦЕЛИКОМ";
 
-const supabase =
-window.supabase.createClient(
+const supabaseKey = "sb_publishable_TRxcPX5BSxmXBlrHl2bnAA_RADPKXza";
+
+const client = window.supabase.createClient(
 supabaseUrl,
 supabaseKey
 );
 
 async function loadCategories(){
 
-const grid =
-document.getElementById("categoriesGrid");
+const grid = document.getElementById("categoriesGrid");
 
-const { data, error } =
-await supabase
+try{
+
+const { data, error } = await client
 .from("categories")
 .select("*")
 .order("id");
 
-if(error){
-
-grid.innerHTML =
-"<div class='card'><h3>Ошибка</h3><p>" +
-error.message +
-"</p></div>";
-
-return;
-}
+if(error) throw error;
 
 grid.innerHTML = "";
+
+if(!data || data.length === 0){
+grid.innerHTML =
+"<div class='card'><h3>Категории не найдены</h3></div>";
+return;
+}
 
 data.forEach(category => {
 
@@ -93,6 +98,19 @@ grid.innerHTML += `
 `;
 
 });
+
+}catch(err){
+
+grid.innerHTML = `
+<div class="card">
+<h3>Ошибка загрузки</h3>
+<p>${err.message}</p>
+</div>
+`;
+
+console.error(err);
+
+}
 
 }
 
