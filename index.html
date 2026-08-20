@@ -159,14 +159,13 @@ margin-top:50px;
 Основные разделы
 </h2>
 
-<div class="grid">
+<div class="grid" id="categoriesGrid">
 
-<a href="endo.html" style="text-decoration:none;color:inherit;">
 <div class="card">
-<h3>Эндодонтия</h3>
-<p>От диагностики до обтурации каналов.</p>
+<h3>Загрузка...</h3>
 </div>
-</a>
+
+</div>
 
 <div class="card">
 <h3>Терапия</h3>
@@ -257,6 +256,58 @@ margin-top:50px;
 </p>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+
+const supabaseUrl =
+'https://ldqrrahczzxbausnevtr.supabase.co';
+
+const supabaseKey =
+'sb_publishable_TRxcPX5BSxmXBlrHl2bnAA_RADPKXza';
+
+const supabase =
+window.supabase.createClient(
+supabaseUrl,
+supabaseKey
+);
+
+async function loadCategories(){
+
+const { data, error } =
+await supabase
+.from('categories')
+.select('*')
+.order('id');
+
+const grid =
+document.getElementById('categoriesGrid');
+
+if(error){
+
+grid.innerHTML =
+'<div class="card"><h3>Ошибка загрузки</h3></div>';
+
+return;
+}
+
+grid.innerHTML = '';
+
+data.forEach(category => {
+
+grid.innerHTML += `
+<div class="card">
+<h3>${category.name}</h3>
+<p>Раздел StomBase</p>
+</div>
+`;
+
+});
+
+}
+
+loadCategories();
+
+</script>
 </body>
 </html>
