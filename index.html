@@ -15,7 +15,7 @@ box-sizing:border-box;
 }
 
 body{
-font-family:Arial, sans-serif;
+font-family:Arial,sans-serif;
 background:#f4f7fb;
 color:#222;
 }
@@ -74,6 +74,7 @@ padding:25px;
 border-radius:18px;
 box-shadow:0 5px 15px rgba(0,0,0,.08);
 transition:.3s;
+cursor:pointer;
 }
 
 .card:hover{
@@ -163,33 +164,7 @@ margin-top:50px;
 
 <div class="card">
 <h3>Загрузка...</h3>
-</div>
-
-</div>
-
-<div class="card">
-<h3>Терапия</h3>
-<p>Кариес, реставрации, адгезивные протоколы.</p>
-</div>
-
-<div class="card">
-<h3>Ортопедия</h3>
-<p>Коронки, вкладки, виниры и протезирование.</p>
-</div>
-
-<div class="card">
-<h3>Хирургия</h3>
-<p>Удаления, осложнения, имплантация.</p>
-</div>
-
-<div class="card">
-<h3>Ортодонтия</h3>
-<p>Основы диагностики и лечения.</p>
-</div>
-
-<div class="card">
-<h3>Клинические случаи</h3>
-<p>Реальные кейсы с подробным разбором.</p>
+<p>Получаем данные из базы...</p>
 </div>
 
 </div>
@@ -250,12 +225,9 @@ margin-top:50px;
 </section>
 
 <div class="footer">
-
-<p>
-© 2025 StomBase
-</p>
-
+<p>© 2025 StomBase</p>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -274,19 +246,25 @@ supabaseKey
 
 async function loadCategories(){
 
+const grid =
+document.getElementById('categoriesGrid');
+
 const { data, error } =
 await supabase
 .from('categories')
 .select('*')
 .order('id');
 
-const grid =
-document.getElementById('categoriesGrid');
-
 if(error){
 
-grid.innerHTML =
-'<div class="card"><h3>Ошибка загрузки</h3></div>';
+console.error(error);
+
+grid.innerHTML = `
+<div class="card">
+<h3>Ошибка подключения</h3>
+<p>${error.message}</p>
+</div>
+`;
 
 return;
 }
@@ -298,7 +276,7 @@ data.forEach(category => {
 grid.innerHTML += `
 <div class="card">
 <h3>${category.name}</h3>
-<p>Раздел StomBase</p>
+<p>Открыть раздел</p>
 </div>
 `;
 
@@ -309,5 +287,6 @@ grid.innerHTML += `
 loadCategories();
 
 </script>
+
 </body>
 </html>
